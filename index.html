@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viewport Size Display</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+
+        .viewport-display {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .viewport-size {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .viewport-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .viewport-size {
+                font-size: 2.5rem;
+            }
+
+            .viewport-label {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="viewport-display">
+        <div class="viewport-size" id="viewportSize">0 x 0</div>
+        <div class="viewport-label">Viewport Size (px)</div>
+    </div>
+
+    <script>
+        function updateViewportSize() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const displayElement = document.getElementById('viewportSize');
+            displayElement.textContent = `${width} x ${height}`;
+        }
+
+        // Update on page load
+        updateViewportSize();
+
+        // Update on window resize
+        window.addEventListener('resize', updateViewportSize);
+    </script>
+</body>
+</html>
