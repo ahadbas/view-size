@@ -4,76 +4,168 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Viewport Size Display</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Doto:wght@400..700&family=Space+Grotesk:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --black: #000000;
+            --surface: #111111;
+            --surface-raised: #1a1a1a;
+            --border: #222222;
+            --border-visible: #333333;
+            --text-disabled: #666666;
+            --text-secondary: #999999;
+            --text-primary: #e8e8e8;
+            --text-display: #ffffff;
+            --ease-out: cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --black: #f5f5f5;
+                --surface: #ffffff;
+                --surface-raised: #f0f0f0;
+                --border: #e8e8e8;
+                --border-visible: #cccccc;
+                --text-disabled: #999999;
+                --text-secondary: #666666;
+                --text-primary: #1a1a1a;
+                --text-display: #000000;
+            }
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html {
+            color-scheme: dark light;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: "Space Grotesk", "DM Sans", system-ui, sans-serif;
+            font-weight: 400;
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
+            background-color: var(--black);
+            color: var(--text-primary);
+            position: relative;
+            overflow-x: hidden;
         }
 
-        .viewport-display {
-            text-align: center;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, var(--border-visible) 1px, transparent 1px);
+            background-size: 16px 16px;
+            opacity: 0.12;
         }
 
-        .viewport-size {
-            font-size: 4rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        .shell {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: clamp(48px, 10vw, 96px) clamp(24px, 6vw, 48px) 32px;
+            max-width: 1200px;
+            margin: 0;
         }
 
-        .viewport-label {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            /*text-transform: uppercase;*/
-            letter-spacing: 2px;
+        .tag {
+            font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
         }
 
-        @media (max-width: 768px) {
-            .viewport-size {
-                font-size: 2.5rem;
+        .hero {
+            font-family: "Doto", "Space Mono", monospace;
+            font-size: clamp(2.75rem, 14vw, 4.5rem);
+            font-weight: 500;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            color: var(--text-display);
+            margin-bottom: 16px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .unit-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 8px 16px;
+            margin-bottom: 64px;
+        }
+
+        .unit {
+            font-family: "Space Mono", monospace;
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .detail {
+            font-family: "Space Grotesk", "DM Sans", system-ui, sans-serif;
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.5;
+            letter-spacing: 0.01em;
+            color: var(--text-secondary);
+            max-width: 28em;
+        }
+
+        .footer {
+            margin-top: auto;
+            padding-top: 48px;
+            font-family: "Space Mono", monospace;
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-disabled);
+        }
+
+        @media (max-width: 480px) {
+            .shell {
+                padding-top: 48px;
             }
 
-            .viewport-label {
-                font-size: 1rem;
+            .hero {
+                font-size: clamp(2.25rem, 11vw, 3rem);
             }
         }
     </style>
 </head>
 <body>
-    <div class="viewport-display">
-        <div class="viewport-size" id="viewportSize">0 x 0</div>
-        <div class="viewport-label">Viewport Size (px)</div>
-    </div>
+    <main class="shell">
+        <p class="tag">[ VIEWPORT ]</p>
+        <h1 class="hero" id="viewportSize" aria-live="polite">0 × 0</h1>
+        <div class="unit-row">
+            <span class="unit">INNER WIDTH × HEIGHT</span>
+            <span class="unit">PX</span>
+        </div>
+        <p class="detail">Live readout of the inner window dimensions in CSS pixels. Resize to update.</p>
+        <footer class="footer">Updates on resize · No network</footer>
+    </main>
 
     <script>
         function updateViewportSize() {
             const width = window.innerWidth;
             const height = window.innerHeight;
             const displayElement = document.getElementById('viewportSize');
-            displayElement.textContent = `${width} x ${height}`;
+            displayElement.textContent = `${width}\u00a0×\u00a0${height}`;
         }
 
-        // Update on page load
         updateViewportSize();
-
-        // Update on window resize
         window.addEventListener('resize', updateViewportSize);
     </script>
 </body>
